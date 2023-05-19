@@ -1,17 +1,8 @@
 <x-app-layout>
-    {{-- @if(auth()->user()->rol->name == 'profesor')
-        <a class="navbar-brand" href="{{ url('/dashboard') }}">
-            nazi
-        </a>
-    @else
-        <a class="navbar-brand" href="{{ url('/calendar') }}">
-            sexo
-        </a>
-    @endif --}}
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            
+
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg m-1">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="relative overflow-x-auto">
