@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ModulosController;
 use App\Http\Controllers\Admin\UfController;
+use App\Http\Controllers\Admin\EvaluacionesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/adm_uf', [UfController::class, 'index'])->name('adm_uf');
         Route::post('/adm_uf', [UfController::class, 'store'])->name('uf.create');
         Route::delete('/adm_uf', [UfController::class, 'destroy'])->name('uf.delete');
+
+        Route::get('/adm_evaluaciones', [EvaluacionesController::class, 'index'])->name('adm_evaluaciones');
+        Route::post('/adm_evaluaciones', [EvaluacionesController::class, 'store'])->name('evaluacion.create');
+        Route::delete('/adm_evaluaciones', [EvaluacionesController::class, 'destroy'])->name('evaluaciones.delete');
 
 
 

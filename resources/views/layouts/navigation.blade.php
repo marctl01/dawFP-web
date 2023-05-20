@@ -21,6 +21,9 @@
                     <x-nav-link :href="route('adm_uf')" :active="request()->routeIs('adm_uf')">
                         {{ __('UF') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('adm_evaluaciones')" :active="request()->routeIs('adm_evaluaciones')">
+                        {{ __('Evaluaciones') }}
+                    </x-nav-link>
 
                 </div>
                 @else

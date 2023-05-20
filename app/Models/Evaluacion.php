@@ -9,6 +9,8 @@ class Evaluacion extends Model
 {
     use HasFactory;
 
+    protected $table = 'evaluaciones';
+
     protected $fillable = ['user_id', 'modulo_id', 'unidadf_id', 'nota'];
 
     public function user()
