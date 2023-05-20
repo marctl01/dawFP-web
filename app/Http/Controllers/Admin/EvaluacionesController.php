@@ -7,6 +7,7 @@ use App\Models\Evaluacion;
 use App\Models\Uf;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class EvaluacionesController extends Controller
@@ -20,6 +21,15 @@ class EvaluacionesController extends Controller
         })->get();
         
         return view('teacher.evaluaciones' , compact('evaluaciones','ufs' , 'users'));
+    }
+
+    public function index_alumn()
+    {   
+        $userId = Auth::id();
+
+        $evaluaciones = Evaluacion::where('user_id', $userId)->paginate(10);
+        
+        return view('alumn.evaluaciones' , compact('evaluaciones'));
     }
 
     public function destroy(Request $request)

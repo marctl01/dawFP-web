@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
     
     Route::group(['middleware' => 'role:alumno'], function () {
         
+        Route::get('/evaluaciones', [EvaluacionesController::class, 'index_alumn'])->name('evaluaciones');
+        
 
     });
 
