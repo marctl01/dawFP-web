@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ModulosController;
 use App\Http\Controllers\Admin\UfController;
 use App\Http\Controllers\Admin\EvaluacionesController;
+use App\Http\Controllers\Admin\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/adm_evaluaciones', [EvaluacionesController::class, 'index'])->name('adm_evaluaciones');
         Route::post('/adm_evaluaciones', [EvaluacionesController::class, 'store'])->name('evaluacion.create');
         Route::delete('/adm_evaluaciones', [EvaluacionesController::class, 'destroy'])->name('evaluaciones.delete');
+
+
+        Route::get('/adm_users', [UserController::class, 'index'])->name('adm_users');
+        Route::post('/adm_users', [UserController::class, 'store'])->name('user.create');
+        Route::delete('/adm_users', [UserController::class, 'destroy'])->name('user.delete');
 
 
 
