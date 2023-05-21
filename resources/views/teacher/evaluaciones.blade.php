@@ -1,4 +1,6 @@
 <x-app-layout>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
@@ -138,15 +140,34 @@
                                         {{ $evaluacion->unidadf->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $evaluacion->nota }}
+                                      <select name="nota" class="block appearance-none w-auto bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="id_modulo">
+                                        <option value="0" @if ($evaluacion->nota == 0) selected @endif >0 - Insuficiente</option>
+                                        <option value="1" @if ($evaluacion->nota == 1) selected @endif >1 - Insuficiente</option>
+                                        <option value="2" @if ($evaluacion->nota == 2) selected @endif >2 - Insuficiente</option>
+                                        <option value="3" @if ($evaluacion->nota == 3) selected @endif >3 - Insuficiente</option>
+                                        <option value="4" @if ($evaluacion->nota == 4) selected @endif >4 - Insuficiente</option>
+                                        <option value="5" @if ($evaluacion->nota == 5) selected @endif >5 - Suficiente</option>
+                                        <option value="6" @if ($evaluacion->nota == 6) selected @endif >6 - Bien</option>
+                                        <option value="7" @if ($evaluacion->nota == 7) selected @endif >7 - Notable</option>
+                                        <option value="8" @if ($evaluacion->nota == 8) selected @endif >8 - Notable</option>
+                                        <option value="9" @if ($evaluacion->nota == 9) selected @endif >9 - Excelente</option>
+                                        <option value="10" @if ($evaluacion->nota == 10) selected @endif >10 - Excelente</option>
+                                      </select>
                                     </td>
 
                                     <td class="px-6 py-4">
+                                      <div class="inline-flex">
+                                        <button onclick="update('{{ $evaluacion->id }}','{{ $evaluacion->user->id }}','{{ $evaluacion->modulo->id }}','{{ $evaluacion->unidadf->id }}',this.parentNode.parentNode.parentNode)" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-4 rounded-l">
+                                          Actualizar
+                                        </button>
                                         <form id="delete-form-{{ $evaluacion->id }}" action="{{ route('evaluaciones.delete', ['id' => $evaluacion->id]) }}" method="POST">
                                             @csrf
                                             @method('delete')
-                                            <input type="submit" value="Eliminar">
+                                            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-4 rounded-r">
+                                              Eliminar
+                                            </button>
                                         </form>
+                                      </div>
                                     </td>
 
                                 </tr>
@@ -154,6 +175,46 @@
                                 
                             </tbody>
                         </table>
+                        
+                        <meta name="csrf-token" content="{{ csrf_token() }}">
+                        <script>
+                          function update(id,user_id,modulo_id,uf_id,trdata) {
+
+                            // console.log(trdata);
+                            let td = trdata.getElementsByTagName("td");
+                            
+                            let nota = td[4].children[0].value;
+                            
+
+                              // Obtén los datos del formulario en un objeto formData
+                              var formData = new FormData();
+                              formData.append('evaluacion_id', id);
+                              formData.append('user_id', user_id);
+                              formData.append('modulo_id', modulo_id);
+                              formData.append('uf_id', uf_id);
+                              formData.append('nota', nota);
+          
+                              var formDataObject = Object.fromEntries(formData);
+                              var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+          
+          
+                              // Realiza la solicitud AJAX
+                              $.ajax({
+                              url: '/adm_evaluaciones/update',
+                              type: 'POST',
+                              data: formDataObject,
+                              headers: {
+                                  'X-CSRF-TOKEN': token
+                              },
+                              success: function(response) {
+                                  // Maneja la respuesta exitosa del servidor
+                                  alert(response[1])
+                                  location.reload();
+                              }
+                              });
+                              
+                          }
+                      </script>
                         <div class="m-2">
                             {{ $evaluaciones->links('pagination::tailwind') }}
                         </div>

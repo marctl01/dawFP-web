@@ -69,4 +69,27 @@ class UserController extends Controller
             return back()->with('error', 'Error al eliminar el Usuario');
         }
     }
+
+    public function update(Request $request)
+    {   
+        $id = $request->input('id');
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $rol_id = $request->input('rol_id');
+        
+        $url = 'https://focused-wozniak.82-223-161-36.plesk.page/api/users/'.$id;
+
+
+        $response = Http::put('https://focused-wozniak.82-223-161-36.plesk.page/api/users/'.$id, [
+            'name' => $name,
+            'email' => $email,
+            'rol_id' => $rol_id
+        ]);
+
+        if ($response->successful()) {
+            return ['success', 'Usuario actualizado con éxito'];
+        } else {
+            return ['error', 'Error al actualizar el Usuario'];
+        }
+    }
 }

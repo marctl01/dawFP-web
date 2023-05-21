@@ -64,4 +64,23 @@ class UfController extends Controller
             return back()->with('error', 'Error al eliminar la Unidad Formativa');
         }
     }
+
+    public function update(Request $request)
+    {   
+        $uf_id = $request->input('uf_id');
+        $id_modulo = $request->input('modulo_id');
+        $ufname = $request->input('name');
+
+
+        $response = Http::put('https://focused-wozniak.82-223-161-36.plesk.page/api/ufs/'.$uf_id, [
+            'name' => $ufname,
+            'modulo_id' => $id_modulo
+        ]);
+
+        if ($response->successful()) {
+            return ['success', 'Modulo actualizado con éxito'];
+        } else {
+            return ['error', 'Error al actualizar el Modulo'];
+        }
+    }
 }

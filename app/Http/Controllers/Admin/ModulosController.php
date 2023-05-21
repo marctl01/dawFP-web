@@ -59,4 +59,21 @@ class ModulosController extends Controller
             return back()->with('error', 'Error al eliminar el Modulo');
         }
     }
+    
+    public function update(Request $request)
+    {   
+        $modulo_id = $request->input('modulo_id');
+        $name = $request->input('name');
+    
+
+        $response = Http::put('https://focused-wozniak.82-223-161-36.plesk.page/api/modulos/'.$modulo_id, [
+            'name' => $name
+        ]);
+
+        if ($response->successful()) {
+            return ['success', 'Modulo actualizado con éxito'];
+        } else {
+            return ['error', 'Error al actualizar el Modulo'];
+        }
+    }
 }

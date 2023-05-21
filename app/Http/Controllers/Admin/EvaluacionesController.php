@@ -88,4 +88,27 @@ class EvaluacionesController extends Controller
             return back()->with('error', 'Error al crear la Evaluacion');
         }
     }
+
+    public function update(Request $request)
+    {   
+        $eva_id = $request->input('evaluacion_id');
+        $user_id = $request->input('user_id');
+        $modulo_id = $request->input('modulo_id');
+        $uf_id = $request->input('uf_id');
+        $nota = $request->input('nota');
+
+
+        $response = Http::put('https://focused-wozniak.82-223-161-36.plesk.page/api/evaluaciones/'.$eva_id, [
+            'user_id' => $user_id,
+            'modulo_id' => $modulo_id,
+            'unidadf_id' => $uf_id,
+            'nota' => $nota
+        ]);
+
+        if ($response->successful()) {
+            return ['success', 'Evaluacion actualizado con éxito'];
+        } else {
+            return ['error', 'Error al actualizar el Evaluacion'];
+        }
+    }
 }

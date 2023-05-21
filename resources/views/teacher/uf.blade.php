@@ -1,5 +1,6 @@
 <x-app-layout>
-
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
@@ -91,18 +92,25 @@
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ $uf->id }}
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $uf->name }}
+                                    <td class="px-6 py-4 w-full">
+                                      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-500 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white" type="text" name="" id="" value = "{{ $uf->name }}">
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-6 py-4 w-auto">
                                         {{ $uf->modulo->name }}
                                     </td>
                                     <td class="px-6 py-4">
+                                      <div class="inline-flex">
+                                        <button onclick="update('{{$uf->id}}','{{$modulo->id}}', this.parentNode.parentNode.parentNode)" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-4 rounded-l">
+                                          Actualizar
+                                        </button>
                                         <form id="delete-form-{{ $uf->id }}" action="{{ route('uf.delete', ['id' => $uf->id]) }}" method="POST">
                                             @csrf
                                             @method('delete')
-                                            <input type="submit" value="Eliminar">
+                                            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-4 rounded-r">
+                                              Eliminar
+                                            </button>
                                         </form>
+                                      </div>
                                     </td>
 
                                 </tr>
@@ -110,6 +118,40 @@
                                 
                             </tbody>
                         </table>
+                        
+                        <meta name="csrf-token" content="{{ csrf_token() }}">
+                        <script>
+                          function update(uf_id,modulo_id,trdata) {
+
+                              let td = trdata.getElementsByTagName("td");
+                              let name = td[0].children[0].value;
+
+                              // Obtén los datos del formulario en un objeto formData
+                              var formData = new FormData();
+                              formData.append('uf_id', uf_id);
+                              formData.append('modulo_id', modulo_id);
+                              formData.append('name', name);
+          
+                              var formDataObject = Object.fromEntries(formData);
+                              var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+          
+                              // Realiza la solicitud AJAX
+                              $.ajax({
+                              url: '/adm_uf/update',
+                              type: 'POST',
+                              data: formDataObject,
+                              headers: {
+                                  'X-CSRF-TOKEN': token
+                              },
+                              success: function(response) {
+                                  // Maneja la respuesta exitosa del servidor
+                                  alert(response[1])
+                                  location.reload();
+                              }
+                              });
+                              
+                          }
+                      </script>
                         <div class="m-2">
                             {{ $ufs->links('pagination::tailwind') }}
                         </div>

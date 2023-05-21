@@ -1,4 +1,5 @@
 <x-app-layout>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
@@ -114,22 +115,70 @@
                                         {{ $user->email }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $user->rol->name }}
+                                          <select name="rol_id" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="id_modulo">
+                                          @foreach ($rols as $rol)
+                                            <option value="{{ $rol->id }}" @if ($rol->id === $user->rol->id) selected @endif>{{ $rol->id }} - {{ $rol->name }}</option>
+                                          @endforeach
+                                      </select>
                                     </td>
 
                                     <td class="px-6 py-4">
+                                      <div class="inline-flex">
+                                        <button onclick="update('{{$user->id}}','{{$user->name}}','{{$user->email}}',this.parentNode.parentNode.parentNode)" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-4 rounded-l">
+                                          Actualizar
+                                        </button>
                                         <form id="delete-form-{{ $user->id }}" action="{{ route('user.delete', ['id' => $user->id]) }}" method="POST">
                                             @csrf
                                             @method('delete')
-                                            <input type="submit" value="Eliminar">
+                                            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-4 rounded-r">
+                                              Eliminar
+                                            </button>
                                         </form>
+                                      </div>
                                     </td>
 
                                 </tr>
                                 @endforeach
                                 
                             </tbody>
+                            <meta name="csrf-token" content="{{ csrf_token() }}">
                         </table>
+                        <script>
+                          function update(id,name,email,trdata) {
+
+                            let td = trdata.getElementsByTagName("td");
+                            
+                            let rol_id = td[2].children[0].value;
+                            
+
+                              // Obtén los datos del formulario en un objeto formData
+                              var formData = new FormData();
+                              formData.append('id', id);
+                              formData.append('name', name);
+                              formData.append('email', email);
+                              formData.append('rol_id', rol_id);
+          
+                              var formDataObject = Object.fromEntries(formData);
+                              var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+          
+          
+                              // Realiza la solicitud AJAX
+                              $.ajax({
+                              url: '/adm_users/update',
+                              type: 'POST',
+                              data: formDataObject,
+                              headers: {
+                                  'X-CSRF-TOKEN': token
+                              },
+                              success: function(response) {
+                                  // Maneja la respuesta exitosa del servidor
+                                  alert(response[1])
+                                  location.reload();
+                              }
+                              });
+                              
+                          }
+                      </script>
                         <div class="m-2">
                             {{ $users->links('pagination::tailwind') }}
                         </div>
